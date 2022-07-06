@@ -28,14 +28,14 @@
 # http://blender.stackexchange.com/q/40436/935
 
 bl_info = {
-    "name": "Save File Prefix",
+    "name": "Save Backup",
     "author": "sambler",
-    "version": (1,2),
+    "version": (1,3),
     "blender": (2, 80, 0),
-    "location": "File->Save Prefixed Blendfile",
-    "description": "Add a prefix to the filename before saving.",
+    "location": "File-> Save Backup",
+    "description": "Create a backup of your blend file.",
     "warning": "Runs user specified python code",
-    "wiki_url": "https://github.com/sambler/addonsByMe/blob/master/file_prefix.py",
+    "wiki_url": "https://github.com/Thane5/blend-file-backup",
     "tracker_url": "https://github.com/sambler/addonsByMe/issues",
     "category": "System",
 }
@@ -55,6 +55,10 @@ class PrefixSavePreferences(bpy.types.AddonPreferences):
                     description="Save prefixed copies instead of renaming the existing file",
                     default=True)
 
+    backupFolder : bpy.props.StringProperty(name="Backup folder name",
+                description="The exact name of the folder where backups will be saved in",
+                default="backup")
+
     def draw(self, context):
         layout = self.layout
         col = layout.column()
@@ -63,6 +67,8 @@ class PrefixSavePreferences(bpy.types.AddonPreferences):
         row.prop(self,"copies")
         row = col.row()
         row.prop(self,"prefix")
+        row = col.row()
+        row.prop(self,"backupFolder")
 
 def timestamp():
     # convienience function that is available to the user in their calculations
@@ -71,14 +77,20 @@ def timestamp():
 class PrefixFileSave(bpy.types.Operator):
     """Set a filename prefix before saving the file"""
     bl_idname = "wm.save_prefix"
-    bl_label = "Save Prefixed Blendfile"
+    bl_label = "Save Backup"
 
     def execute(self, context):
         user_preferences = context.preferences
         addon_prefs = user_preferences.addons[__name__].preferences
         outname = eval(addon_prefs.prefix) + bpy.path.basename(bpy.data.filepath)
-        outpath = os.path.dirname(bpy.path.abspath(bpy.data.filepath))
+        outpath = os.path.join(os.path.dirname(bpy.path.abspath(bpy.data.filepath)), addon_prefs.backupFolder)
         print(os.path.join(outpath, outname))
+
+        # If no /backup folder exists, create one
+        if not(os.path.exists(outpath)):
+            os.mkdir(outpath)
+
+        #print(os.path.join(outpath, outname))
         if addon_prefs.copies:
             return bpy.ops.wm.save_as_mainfile(filepath=os.path.join(outpath, outname),
                     check_existing=True, copy=True)

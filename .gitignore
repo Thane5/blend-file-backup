@@ -1,8 +1,0 @@
-# common files we don't want to archive
-*.blend*
-*~
-
-# python temp paths
-__pycache__/
-*.py[cod]
-

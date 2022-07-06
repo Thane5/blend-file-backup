@@ -1,10 +1,6 @@
-addonsByMe is a collection of blender addons that I have created.
-This allows better tracking of my work and issues to be reported
-separate from the official contrib addons.
+A Blender plugin to easily create backups of the currently opened blend file.
 
-Some of these were originally added to https://github.com/sambler/myblendercontrib
-All of these files will be merged into myblendercontrib to keep it
-as one folder that gets used during the blender build process.
+It will add a new button under "File" -> "Save Backup", which will save a backup blend file.
+The file will be saved next to your current blend file, in a folder called "backup" (name can be changed in preferences). 
 
-To get official blender source or binaries see http://blender.org
-For my blender repo see https://github.com/sambler/myblender
+Based on an addon by [sambler](https://github.com/sambler)

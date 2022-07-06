@@ -30,7 +30,7 @@
 bl_info = {
     "name": "Save File Prefix",
     "author": "sambler",
-    "version": (1,1),
+    "version": (1,2),
     "blender": (2, 80, 0),
     "location": "File->Save Prefixed Blendfile",
     "description": "Add a prefix to the filename before saving.",
@@ -99,24 +99,18 @@ def register():
     win_keymaps = wm.keyconfigs.user.keymaps.get('Window')
     if win_keymaps:
         # disable standard save file keymaps
-        for kmi in win_keymaps.keymap_items:
-            if kmi.idname == 'wm.save_mainfile':
-                kmi.active = False
+
 
         # add a keymap for our save operator
-        kmi = win_keymaps.keymap_items.new(PrefixFileSave.bl_idname, 'S', 'PRESS', ctrl=True)
+        pass
+
 
 def unregister():
 
     wm = bpy.context.window_manager
     win_keymaps = wm.keyconfigs.user.keymaps.get('Window')
     if win_keymaps:
-        for kmi in win_keymaps.keymap_items:
-            # re-enable standard save file
-            if kmi.idname == 'wm.save_mainfile':
-                kmi.active = True
-            if kmi.idname == PrefixFileSave.bl_idname:
-                win_keymaps.keymap_items.remove(kmi)
+    	pass
 
     bpy.types.TOPBAR_MT_file.remove(menu_save_prefix)
 
@@ -125,4 +119,3 @@ def unregister():
 
 if __name__ == "__main__":
     register()
-
